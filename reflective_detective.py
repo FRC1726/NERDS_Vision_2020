@@ -55,6 +55,16 @@ class GripPipeline:
         self.__filter_contours_contours = self.find_contours_output
         (self.filter_contours_output) = self.__filter_contours(self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
 
+    def NT_HSV(self, hue, sat, val):
+        """setting hsv to external values
+        Args:
+            hue: A list of two numbers the are the min and max hue.
+            sat: A list of two numbers the are the min and max saturation.
+            val: A list of two numbers the are the min and max value.
+        """
+        self.__hsv_threshold_hue = hue
+        self.__hsv_threshold_saturation = sat
+        self.__hsv_threshold_value = val
 
     @staticmethod
     def __hsv_threshold(input, hue, sat, val):
@@ -63,12 +73,12 @@ class GripPipeline:
             input: A BGR numpy.ndarray.
             hue: A list of two numbers the are the min and max hue.
             sat: A list of two numbers the are the min and max saturation.
-            lum: A list of two numbers the are the min and max value.
+            val: A list of two numbers the are the min and max value.
         Returns:
             A black and white numpy.ndarray.
         """
         out = cv2.cvtColor(input, cv2.COLOR_BGR2HSV)
-        return cv2.inRange(out, (hue[0], sat[0], val[0]),  (hue[1], sat[1], val[1]))
+        return cv2.inRange(out, (hue[0](), sat[0](), val[0]()),  (hue[1](), sat[1](), val[1]()))
 
     @staticmethod
     def __find_contours(input, external_only):
