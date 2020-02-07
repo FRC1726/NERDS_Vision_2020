@@ -34,19 +34,26 @@ def live_video(camera_port=1):
             cv2.imshow('Video', frame)
             pipeline.process(frame)
             cv2.imshow("grip", pipeline.hsv_threshold_output)
-
+            
             contours = pipeline.filter_contours_output
 
             cv2.drawContours(frame, contours, -1, (0,255,0), 3)
 
             cv2.imshow("contours", frame)
-            
+
             if contours:
                 moment = cv2.moments(contours[0])
                 center = (moment['m10'] / (moment['m00'] + 1e-5), moment['m01'] / (moment['m00'] + 1e-5))
 
-                nt.addValue("Vision/Center/X", center[0])
-                nt.addValue("Vision/Center/Y", center[1])
+                screen_height = numpy.size(frame, 0)
+                screen_width = numpy.size(frame, 1)
+
+                nt.addValue("Vision/Center/X", center[0] - screen_width/2)
+                nt.addValue("Vision/Center/Y", center[1] - screen_height/2)
+
+            else:
+                nt.addValue("Vision/Center/X", 0)
+                nt.addValue("Vision/Center/Y", 0)
 
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
