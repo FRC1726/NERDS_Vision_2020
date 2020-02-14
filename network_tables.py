@@ -16,11 +16,11 @@ class NTHandler:
         self._smart_dashboard = NetworkTables.getTable('SmartDashboard')
 
 
-    def addListener(self, key):
+    def addListener(self, key, default_value):
         if not self._preference.containsKey(key):
-            self._preference.putNumber(key, 0)
+            self._preference.putNumber(key, default_value)
             self._preference.setPersistent(key)
-        return lambda table=self._preference, key=key : table.getValue(key, 0)
+        return lambda table=self._preference, key=key, default=default_value : table.getValue(key, default_value)
 
 
     def addValue(self, key, value):

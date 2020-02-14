@@ -24,11 +24,12 @@ class GripPipeline:
         self.find_contours_output = None
 
         self.__filter_contours_contours = self.find_contours_output
-        self.__filter_contours_min_area = 800.0
+        self.__filter_contours_min_area = 3800.0
+        self.__filter_contours_max_area = 5000.0
         self.__filter_contours_min_perimeter = 0
         self.__filter_contours_min_width = 0
         self.__filter_contours_max_width = 1000
-        self.__filter_contours_min_height = 200
+        self.__filter_contours_min_height = 50
         self.__filter_contours_max_height = 1000
         self.__filter_contours_solidity = [0, 100]
         self.__filter_contours_max_vertices = 1000000
@@ -53,7 +54,7 @@ class GripPipeline:
 
         # Step Filter_Contours0:
         self.__filter_contours_contours = self.find_contours_output
-        (self.filter_contours_output) = self.__filter_contours(self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
+        (self.filter_contours_output) = self.__filter_contours(self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_max_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
 
     def NT_HSV(self, hue, sat, val):
         """setting hsv to external values
@@ -98,7 +99,7 @@ class GripPipeline:
         return contours
 
     @staticmethod
-    def __filter_contours(input_contours, min_area, min_perimeter, min_width, max_width,
+    def __filter_contours(input_contours, min_area, max_area, min_perimeter, min_width, max_width,
                         min_height, max_height, solidity, max_vertex_count, min_vertex_count,
                         min_ratio, max_ratio):
         """Filters out contours that do not meet certain criteria.
@@ -127,6 +128,8 @@ class GripPipeline:
                 continue
             area = cv2.contourArea(contour)
             if (area < min_area):
+                continue
+            if (area > max_area):
                 continue
             if (cv2.arcLength(contour, True) < min_perimeter):
                 continue
