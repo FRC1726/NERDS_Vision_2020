@@ -13,15 +13,15 @@ def live_video(camera_port=1):
         :return:
         """
         nt = network_tables.NTHandler()
-        hue_min = nt.addListener("Vision/Hue/Min")
-        hue_max = nt.addListener("Vision/Hue/Max")
-        sat_min = nt.addListener("Vision/sat/Min")
-        sat_max = nt.addListener("Vision/sat/Max")
-        val_min = nt.addListener("Vision/val/Min")
-        val_max = nt.addListener("Vision/val/Max")
+        hue_min = nt.addListener("Vision/Hue/Min", 40)
+        hue_max = nt.addListener("Vision/Hue/Max", 86)
+        sat_min = nt.addListener("Vision/sat/Min", 0)
+        sat_max = nt.addListener("Vision/sat/Max", 84)
+        val_min = nt.addListener("Vision/val/Min", 220)
+        val_max = nt.addListener("Vision/val/Max", 255)
 
 
-        video_capture = cv2.VideoCapture(1)
+        video_capture = cv2.VideoCapture(0)
         pipeline = rd.GripPipeline()
 
         pipeline.NT_HSV([hue_min, hue_max], [sat_min, sat_max], [val_min, val_max])
@@ -37,7 +37,7 @@ def live_video(camera_port=1):
             
             contours = pipeline.filter_contours_output
 
-            cv2.drawContours(frame, contours, -1, (0,255,0), 3)
+            cv2.drawContours(frame, contours, -1, (127,0,255), 3)
 
             cv2.imshow("contours", frame)
 
