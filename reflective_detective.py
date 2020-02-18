@@ -66,6 +66,15 @@ class GripPipeline:
         self.__hsv_threshold_hue = hue
         self.__hsv_threshold_saturation = sat
         self.__hsv_threshold_value = val
+    
+    def NT_Area(self, min_area, max_area):
+        """setting hsv to external values
+        Args:
+            min_area: the minimum area the contours can be detected at.
+            max_area: the maximum value that the contours can be detected at.
+        """
+        self.__filter_contours_min_area = min_area
+        self.__filter_contours_max_area = max_area
 
     @staticmethod
     def __hsv_threshold(input, hue, sat, val):
@@ -127,9 +136,9 @@ class GripPipeline:
             if (h < min_height or h > max_height):
                 continue
             area = cv2.contourArea(contour)
-            if (area < min_area):
+            if (area < min_area()):
                 continue
-            if (area > max_area):
+            if (area > max_area()):
                 continue
             if (cv2.arcLength(contour, True) < min_perimeter):
                 continue

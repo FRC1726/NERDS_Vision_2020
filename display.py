@@ -19,12 +19,17 @@ def live_video(camera_port=1):
         sat_max = nt.addListener("Vision/sat/Max", 84)
         val_min = nt.addListener("Vision/val/Min", 220)
         val_max = nt.addListener("Vision/val/Max", 255)
+        min_area = nt.addListener("Vision/area/min", 3800)
+        max_area = nt.addListener("Vision/area/max", 5000)
+
+
 
 
         video_capture = cv2.VideoCapture(0)
         pipeline = rd.GripPipeline()
 
-        pipeline.NT_HSV([hue_min, hue_max], [sat_min, sat_max], [val_min, val_max])
+        pipeline.NT_HSV([hue_min, hue_max], [sat_min, sat_max], [val_min, val_max],)
+        pipeline.NT_Area(min_area, max_area)
 
         while True:
             # Capture frame-by-frame
