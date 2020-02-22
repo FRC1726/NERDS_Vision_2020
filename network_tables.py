@@ -6,11 +6,15 @@ import display as display
 
 class NTHandler:
 
-    def __init__(self):
-        self._connected = False
-        _thread = threading.Thread(target=self.NTInit)
-        _thread.start()
-        _thread.join()
+    def __init__(self, nt_instance = None):
+        if nt_instance is None:
+            self._connected = False
+            _thread = threading.Thread(target=self.NTInit)
+            _thread.start()
+            _thread.join()
+        else:
+            self._nt_instance = nt_instance
+            self._connected = True
 
         self._preference = NetworkTables.getTable('Preference')
         self._smart_dashboard = NetworkTables.getTable('SmartDashboard')
