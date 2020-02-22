@@ -26,6 +26,7 @@ def live_video(camera, ntinstance = None):
         cs = CameraServer.getInstance()
 
         cvSink = cs.getVideo(camera = camera)
+        outputStream = cs.putVideo("Contours", 1280, 720)
 
         #video_capture = cv2.VideoCapture(0)
         pipeline = rd.GripPipeline()
@@ -47,7 +48,8 @@ def live_video(camera, ntinstance = None):
             
             contours = pipeline.filter_contours_output
 
-            #cv2.drawContours(frame, contours, -1, (127,0,255), 3)
+            cv2.drawContours(frame, contours, -1, (127,0,255), 3)
+            outputStream.putFrame(frame)
 
             #cv2.imshow("contours", frame)
 
@@ -68,6 +70,7 @@ def live_video(camera, ntinstance = None):
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
+            
         # When everything is done, release the capture
         #video_capture.release()
         cv2.destroyAllWindows() 
